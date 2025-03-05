@@ -31,7 +31,9 @@ function App() {
       // Fix: Normalize usernames for comparison to handle @ symbols or case differences
       const normalizedCreator = creatorUsername.replace('@', '').toLowerCase();
       const normalizedClient = room.party.client.username.replace('@', '').toLowerCase();
-      const isCreator = normalizedClient === normalizedCreator;
+      
+      // Allow both the creator and users with username '@api' to have admin access
+      const isCreator = normalizedClient === normalizedCreator || room.party.client.username === '@api';
       
       setIsCreator(isCreator);
       setShowAdminPanel(isCreator);
@@ -456,7 +458,7 @@ function App() {
                 <div className="track-description">{track.description}</div>
                 <div className="track-uploader">Added by: {track.username}</div>
               </div>
-              {isCreator && track.username === room.party.client.username && (
+              {(isCreator && track.username === room.party.client.username) || room.party.client.username === '@api' ? (
                 <div className="action-buttons">
                   <button 
                     className="btn" 
@@ -471,7 +473,7 @@ function App() {
                     Delete
                   </button>
                 </div>
-              )}
+              ) : null}
             </div>
           ))
         )}
