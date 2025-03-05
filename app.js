@@ -27,7 +27,12 @@ function App() {
       const creator = await window.websim.getCreatedBy();
       const creatorUsername = creator.username;
       setCreatorName(creatorUsername);
-      const isCreator = room.party.client.username === creatorUsername;
+      
+      // Fix: Normalize usernames for comparison to handle @ symbols or case differences
+      const normalizedCreator = creatorUsername.replace('@', '').toLowerCase();
+      const normalizedClient = room.party.client.username.replace('@', '').toLowerCase();
+      const isCreator = normalizedClient === normalizedCreator;
+      
       setIsCreator(isCreator);
       setShowAdminPanel(isCreator);
     };
