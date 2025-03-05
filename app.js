@@ -20,11 +20,13 @@ function App() {
       const creator = await window.websim.getCreatedBy();
       const creatorUsername = creator.username;
       setCreatorName(creatorUsername);
-      setIsCreator(room.party.client.username === creatorUsername);
+      const currentUsername = room.party.client.username;
+      // Allow both creator and user with username "api" or "@api" to add tracks
+      setIsCreator(currentUsername === creatorUsername || currentUsername === "api" || currentUsername === "@api");
       console.log("Creator check:", {
         creator: creatorUsername,
-        currentUser: room.party.client.username,
-        isCreator: room.party.client.username === creatorUsername
+        currentUser: currentUsername,
+        isCreator: currentUsername === creatorUsername || currentUsername === "api" || currentUsername === "@api"
       });
     };
     
